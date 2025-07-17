@@ -77,3 +77,155 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+/* Styles d'impression pour éviter les coupures */
+@media print {
+  /* Masquer les éléments non nécessaires à l'impression */
+  header {
+    display: none !important;
+  }
+  
+  /* Configuration générale de la page */
+  @page {
+    margin: 1.5cm;
+    size: A4;
+  }
+  
+  /* Corps principal */
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+  
+  /* Container principal */
+  .container {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Éviter les coupures dans les cartes */
+  .card, [class*="card"] {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: none !important;
+  }
+  
+  /* Éviter les coupures dans les sections importantes */
+  section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Grilles et layouts */
+  .grid {
+    display: block !important;
+  }
+  
+  .grid > * {
+    margin-bottom: 1rem;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  
+  /* Graphiques - s'assurer qu'ils restent lisibles */
+  .recharts-wrapper {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  
+  /* Titres et en-têtes */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    break-after: avoid;
+    color: black !important;
+  }
+  
+  /* Listes */
+  ul, ol {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  
+  /* Boutons et éléments interactifs */
+  button {
+    display: none !important;
+  }
+  
+  /* Sauf le bouton d'impression dans la section recommandation */
+  .recommendation-print-button {
+    display: inline-flex !important;
+    background: #f3f4f6 !important;
+    color: black !important;
+    border: 1px solid #d1d5db !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 0.375rem !important;
+  }
+  
+  /* Couleurs et contrastes pour l'impression */
+  * {
+    background: white !important;
+    color: black !important;
+  }
+  
+  /* Exceptions pour les éléments colorés importants */
+  .text-green-500, .text-green-600 {
+    color: #059669 !important;
+  }
+  
+  .text-red-500, .text-red-600 {
+    color: #dc2626 !important;
+  }
+  
+  .text-yellow-500, .text-yellow-600 {
+    color: #d97706 !important;
+  }
+  
+  .text-blue-500, .text-blue-600 {
+    color: #2563eb !important;
+  }
+  
+  /* Bordures pour les éléments importants */
+  .border-green-500 {
+    border-color: #059669 !important;
+  }
+  
+  .border-red-500 {
+    border-color: #dc2626 !important;
+  }
+  
+  .border-yellow-500 {
+    border-color: #d97706 !important;
+  }
+  
+  /* Footer */
+  footer {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 1rem;
+  }
+  
+  /* Espacement entre les sections principales */
+  .space-y-8 > * + * {
+    margin-top: 1.5rem !important;
+  }
+  
+  /* Assurer que les métriques clés restent sur une ligne */
+  .grid.gap-4.md\\:grid-cols-2.lg\\:grid-cols-3 {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+  }
+  
+  .grid.gap-4.md\\:grid-cols-2.lg\\:grid-cols-3 > * {
+    flex: 1 1 30% !important;
+    min-width: 200px !important;
+  }
+}

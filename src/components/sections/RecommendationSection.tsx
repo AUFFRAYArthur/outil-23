@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { cn } from '../../lib/utils';
-import { Check, X, AlertTriangle, Send } from 'lucide-react';
+import { Check, X, AlertTriangle, Printer } from 'lucide-react';
 
 type Recommendation = 'go' | 'no_go' | 'conditional_go';
 
 const RecommendationSection: React.FC = () => {
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null);
+  
+  const handlePrint = () => {
+    window.print();
+  };
 
   const options: { id: Recommendation; label: string; icon: React.ElementType; color: string }[] = [
     { id: 'go', label: 'Go', icon: Check, color: 'border-green-500 hover:bg-green-50 text-green-600' },
@@ -54,8 +58,8 @@ const RecommendationSection: React.FC = () => {
           </div>
         )}
         <div className="flex justify-end">
-          <Button>
-            <Send className="h-4 w-4 mr-2" />
+          <Button onClick={handlePrint} className="recommendation-print-button">
+            <Printer className="h-4 w-4 mr-2" />
             Imprimer le compte rendu intermédiaire
           </Button>
         </div>
