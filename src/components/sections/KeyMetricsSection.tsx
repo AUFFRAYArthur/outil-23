@@ -6,6 +6,7 @@ import EditableField from '../ui/EditableField';
 import EditingModal from '../ui/EditingModal';
 import { useEditingModal } from '../../hooks/useEditingModal';
 import { useRealtimeSync } from '../../hooks/useRealtimeSync';
+import { cn } from '../../lib/utils';
 
 const KeyMetricsSection: React.FC = () => {
   const [updateCounter, forceUpdate] = React.useReducer(x => x + 1, 0);
