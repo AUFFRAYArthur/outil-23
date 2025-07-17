@@ -1,12 +1,22 @@
 import React from 'react';
-import { Briefcase, Edit3 } from 'lucide-react';
+import { Briefcase, Edit3, Lightbulb, Save, Printer, RotateCcw } from 'lucide-react';
 import { projectData, updateProjectData } from '../../data/mockData';
 import EditableField from '../ui/EditableField';
 import EditingModal from '../ui/EditingModal';
 import { useEditingModal } from '../../hooks/useEditingModal';
+import { Button } from '../ui/Button';
+import NoticeTooltip from './NoticeTooltip';
+import SaveModal from './SaveModal';
+import { useSaveLoad } from '../../hooks/useSaveLoad';
+import { useFilRouge } from '../../hooks/useFilRouge';
 
 const Header: React.FC = () => {
   const { modalState, openModal, closeModal } = useEditingModal();
+  const { exportData, importData } = useSaveLoad();
+  const { loadFilRougeData, resetData } = useFilRouge();
+  const [showNotice, setShowNotice] = React.useState(false);
+  const [showSaveModal, setShowSaveModal] = React.useState(false);
+  const [showResetConfirm, setShowResetConfirm] = React.useState(false);
 
   const handleEditProject = () => {
     openModal({
@@ -43,6 +53,23 @@ const Header: React.FC = () => {
         updateProjectData(data);
       }
     });
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleFilRouge = () => {
+    loadFilRougeData();
+  };
+
+  const handleReset = () => {
+    setShowResetConfirm(true);
+  };
+
+  const confirmReset = () => {
+    resetData();
+    setShowResetConfirm(false);
   };
 
   return (
@@ -87,6 +114,48 @@ const Header: React.FC = () => {
               </div>
             </div>
           </div>
+          
+          <div className="flex items-center space-x-4">
+            {/* Bouton Cas fil rouge */}
+            <Button
+              variant="outline"
+              onClick={handleFilRouge}
+              className="text-sm"
+            >
+              Cas fil rouge
+            </Button>
+            
+            {/* Icône Notice */}
+            <div className="relative">
+              <button
+                onMouseEnter={() => setShowNotice(true)}
+                onMouseLeave={() => setShowNotice(false)}
+                className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 transition-colors group"
+              >
+                <Lightbulb className={`h-5 w-5 transition-colors ${showNotice ? 'text-yellow-500' : 'text-gray-600'}`} />
+                <span className="text-xs text-gray-500 mt-1">notice</span>
+              </button>
+              <NoticeTooltip isVisible={showNotice} onClose={() => setShowNotice(false)} />
+            </div>
+            
+            {/* Icône Sauvegarde */}
+            <button
+              onClick={() => setShowSaveModal(true)}
+              className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <Save className="h-5 w-5 text-gray-600" />
+              <span className="text-xs text-gray-500 mt-1">save</span>
+            </button>
+            
+            {/* Icône Impression */}
+            <button
+              onClick={handlePrint}
+              className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <Printer className="h-5 w-5 text-gray-600" />
+              <span className="text-xs text-gray-500 mt-1">print</span>
+            </button>
+          </div>
         </div>
       </div>
       </header>
@@ -100,6 +169,45 @@ const Header: React.FC = () => {
         initialData={modalState.initialData}
         onSave={modalState.onSave}
       />
+      
+      <SaveModal
+        isOpen={showSaveModal}
+        onClose={() => setShowSaveModal(false)}
+        onExport={exportData}
+        onImport={importData}
+      />
+      
+      {/* Modal de confirmation reset */}
+      {showResetConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowResetConfirm(false)} />
+          <div className="relative bg-white rounded-xl shadow-2xl p-6 max-w-md mx-4">
+            <div className="text-center">
+              <RotateCcw className="h-12 w-12 text-red-500 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Confirmer la remise à zéro</h3>
+              <p className="text-gray-600 mb-6">
+                Cette action supprimera toutes les données actuelles et remettra l'application à son état initial. Cette action est irréversible.
+              </p>
+              <div className="flex space-x-3">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowResetConfirm(false)}
+                  className="flex-1"
+                >
+                  Annuler
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={confirmReset}
+                  className="flex-1"
+                >
+                  Confirmer
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
