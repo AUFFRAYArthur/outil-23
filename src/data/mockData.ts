@@ -25,10 +25,13 @@ export let keyMetrics = {
 export const updateKeyMetrics = (updates: Partial<typeof keyMetrics>) => {
   // Only update non-computed properties
   const { stepsCompleted, totalSteps, ...otherUpdates } = updates;
+  console.log('mockData: updateKeyMetrics called with:', otherUpdates);
   Object.assign(keyMetrics, otherUpdates);
+  console.log('mockData: keyMetrics after update:', keyMetrics);
   
   // Trigger real-time sync for specific metrics
   if ('employeeEngagement' in otherUpdates) {
+    console.log('mockData: Triggering employee-engagement-sync');
     syncManager.notify('employee-engagement-sync');
   }
   if ('securedFinancing' in otherUpdates || 'totalFinancing' in otherUpdates) {

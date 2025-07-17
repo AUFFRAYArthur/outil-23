@@ -4,10 +4,11 @@ import { keyMetrics } from '../../data/mockData';
 import { useRealtimeSync } from '../../hooks/useRealtimeSync';
 
 const EngagementChart: React.FC = () => {
-  const [updateCounter, forceUpdate] = React.useReducer(x => x + 1, 0);
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
   
   // Subscribe to employee engagement changes with stable callback
   const handleEngagementSync = React.useCallback(() => {
+    console.log('EngagementChart: Received employee-engagement-sync notification');
     forceUpdate();
   }, []);
   
@@ -15,10 +16,14 @@ const EngagementChart: React.FC = () => {
   
   // Get current values on each render to ensure fresh data
   const { employeeEngagement } = keyMetrics;
+  console.log('EngagementChart: Current employeeEngagement value:', employeeEngagement);
+  
   const data = [
     { name: 'Favorables', value: employeeEngagement },
     { name: 'Autres', value: 100 - employeeEngagement },
   ];
+  
+  console.log('EngagementChart: Chart data:', data);
   const COLORS = ['#16a34a', '#e5e7eb'];
 
   return (

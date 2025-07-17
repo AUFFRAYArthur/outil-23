@@ -67,6 +67,7 @@ const KeyMetricsSection: React.FC = () => {
       ],
       initialData: { employeeEngagement },
       onSave: async (data) => {
+        console.log('KeyMetricsSection: About to update employeeEngagement to:', data.employeeEngagement);
         updateKeyMetrics({ employeeEngagement: data.employeeEngagement });
       }
     });
