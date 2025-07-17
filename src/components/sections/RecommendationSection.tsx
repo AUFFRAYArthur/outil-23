@@ -56,7 +56,7 @@ const RecommendationSection: React.FC = () => {
         <div className="flex justify-end">
           <Button>
             <Send className="h-4 w-4 mr-2" />
-            Valider et archiver la décision
+            Imprimer le compte rendu intermédiaire
           </Button>
         </div>
       </CardContent>
