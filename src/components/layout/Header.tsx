@@ -13,7 +13,7 @@ const Header: React.FC = () => {
               <Briefcase className="h-6 w-6" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-800">Outil 23</h1>
+              <h1 className="text-xl font-bold text-gray-800">Compte rendu intermédiaire de mission</h1>
               <p className="text-sm text-gray-500 hidden sm:block">{projectData.projectName}</p>
             </div>
           </div>
