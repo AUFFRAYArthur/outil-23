@@ -12,6 +12,7 @@ const KeyMetricsSection: React.FC = () => {
   
   // Subscribe to steps completion changes with stable callback
   const handleStepsSync = React.useCallback(() => {
+    console.log('KeyMetricsSection: Received steps-completion-sync notification. Current steps:', keyMetrics.stepsCompleted, '/', keyMetrics.totalSteps);
     forceUpdate();
   }, []);
   

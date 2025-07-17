@@ -73,6 +73,7 @@ export const updateAnalysis = (updates: Partial<typeof analysis>) => {
 export const updateDocuments = (updates: typeof documents) => {
   documents.splice(0, documents.length, ...updates);
   // Trigger real-time sync for steps completion
+  console.log('mockData: Notifying steps-completion-sync, completed steps:', documents.filter(doc => doc.status === 'completed').length);
   syncManager.notify('steps-completion-sync');
 };
 

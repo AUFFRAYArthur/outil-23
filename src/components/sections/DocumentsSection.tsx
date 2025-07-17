@@ -53,6 +53,7 @@ const DocumentsSection: React.FC = () => {
           ...doc,
           status: data[`status_${doc.id}`]
         }));
+        console.log('DocumentsSection: About to update documents with new statuses');
         updateDocuments(updatedDocuments);
       }
     });
