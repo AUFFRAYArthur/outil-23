@@ -109,24 +109,7 @@ const KeyMetricsSection: React.FC = () => {
   };
 
   const handleEditSteps = () => {
-    openModal({
-      title: 'Information sur l\'avancement des étapes',
-      description: 'Le nombre d\'étapes réalisées se calcule automatiquement en fonction du statut des livrables. Modifiez les statuts dans la section "Livrables et Données" pour mettre à jour ce compteur.',
-      fields: [
-        {
-          key: 'info',
-          label: 'Calcul automatique',
-          type: 'text',
-          description: 'Les étapes réalisées correspondent aux livrables ayant le statut "Complété". Pour modifier ce nombre, changez le statut des livrables dans la section correspondante.',
-          placeholder: 'Calcul automatique basé sur les livrables',
-          required: false,
-        }
-      ],
-      initialData: { info: 'Calcul automatique basé sur les livrables' },
-      onSave: async (data) => {
-        // No action needed as this is informational only
-      }
-    });
+    // Fonction désactivée - calcul automatique uniquement
   };
 
   return (
@@ -136,7 +119,7 @@ const KeyMetricsSection: React.FC = () => {
         {metrics.map((metric, index) => {
           const handleEdit = index === 0 ? handleEditEngagement : 
                            index === 1 ? handleEditFinancing : 
-                           handleEditSteps;
+                           undefined; // Désactiver l'édition pour les étapes
           
           return (
           <Card key={metric.title}>
@@ -145,11 +128,16 @@ const KeyMetricsSection: React.FC = () => {
               <metric.icon className={`h-5 w-5 ${metric.color}`} />
             </CardHeader>
             <CardContent>
-              <EditableField
-                value={metric.value}
-                onClick={handleEdit}
-                className="text-2xl font-bold"
-              />
+              {index === 2 ? (
+                // Affichage en lecture seule pour les étapes réalisées
+                <div className="text-2xl font-bold">{metric.value}</div>
+              ) : (
+                <EditableField
+                  value={metric.value}
+                  onClick={handleEdit}
+                  className="text-2xl font-bold"
+                />
+              )}
               {metric.description && <p className="text-xs text-muted-foreground">{metric.description}</p>}
             </CardContent>
           </Card>
