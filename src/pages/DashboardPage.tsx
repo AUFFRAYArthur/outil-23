@@ -9,9 +9,10 @@ import { SectionVisibility } from '../components/layout/PrintSettingsModal';
 
 interface DashboardPageProps {
   sectionsVisibility: SectionVisibility;
+  onOpenPrintModal: () => void;
 }
 
-const DashboardPage: React.FC<DashboardPageProps> = ({ sectionsVisibility }) => {
+const DashboardPage: React.FC<DashboardPageProps> = ({ sectionsVisibility, onOpenPrintModal }) => {
   return (
     <div className="container mx-auto space-y-8">
       {sectionsVisibility.keyMetrics && <KeyMetricsSection />}
@@ -27,7 +28,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ sectionsVisibility }) => 
         </div>
       </div>
 
-      {sectionsVisibility.recommendation && <RecommendationSection />}
+      {sectionsVisibility.recommendation && <RecommendationSection onOpenPrintModal={onOpenPrintModal} />}
 
       <footer className="text-center text-sm text-muted-foreground py-8">
         <p>Outil 23 - Compte rendu intermédiaire de mission</p>

@@ -14,15 +14,21 @@ import { useFilRouge } from '../../hooks/useFilRouge';
 interface HeaderProps {
   sectionsVisibility: SectionVisibility;
   onUpdatePrintSettings: (visibility: SectionVisibility) => void;
+  showPrintModal: boolean;
+  setShowPrintModal: (show: boolean) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ sectionsVisibility, onUpdatePrintSettings }) => {
+const Header: React.FC<HeaderProps> = ({ 
+  sectionsVisibility, 
+  onUpdatePrintSettings, 
+  showPrintModal, 
+  setShowPrintModal 
+}) => {
   const { modalState, openModal, closeModal } = useEditingModal();
   const { exportData, importData } = useSaveLoad();
   const { loadFilRougeData, resetData } = useFilRouge();
   const [showNotice, setShowNotice] = React.useState(false);
   const [showSaveModal, setShowSaveModal] = React.useState(false);
-  const [showPrintModal, setShowPrintModal] = React.useState(false);
   const [showResetConfirm, setShowResetConfirm] = React.useState(false);
 
   const handleEditProject = () => {
@@ -64,14 +70,6 @@ const Header: React.FC<HeaderProps> = ({ sectionsVisibility, onUpdatePrintSettin
 
   const handlePrint = () => {
     setShowPrintModal(true);
-  };
-
-  const handlePrintConfirmed = (selections: SectionVisibility) => {
-    onUpdatePrintSettings(selections);
-    // Petit délai pour laisser le temps au DOM de se mettre à jour
-    setTimeout(() => {
-      window.print();
-    }, 100);
   };
 
   const handleFilRouge = () => {
@@ -201,13 +199,6 @@ const Header: React.FC<HeaderProps> = ({ sectionsVisibility, onUpdatePrintSettin
         onClose={() => setShowSaveModal(false)}
         onExport={exportData}
         onImport={importData}
-      />
-      
-      <PrintSettingsModal
-        isOpen={showPrintModal}
-        onClose={() => setShowPrintModal(false)}
-        initialSelections={sectionsVisibility}
-        onPrint={handlePrintConfirmed}
       />
       
       {/* Modal de confirmation reset */}

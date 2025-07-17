@@ -6,11 +6,15 @@ import { Check, X, AlertTriangle, Printer } from 'lucide-react';
 
 type Recommendation = 'go' | 'no_go' | 'conditional_go';
 
-const RecommendationSection: React.FC = () => {
+interface RecommendationSectionProps {
+  onOpenPrintModal: () => void;
+}
+
+const RecommendationSection: React.FC<RecommendationSectionProps> = ({ onOpenPrintModal }) => {
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null);
   
   const handlePrint = () => {
-    window.print();
+    onOpenPrintModal();
   };
 
   const options: { id: Recommendation; label: string; icon: React.ElementType; color: string }[] = [
