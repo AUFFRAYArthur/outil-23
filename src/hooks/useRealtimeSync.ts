@@ -76,3 +76,5 @@ export const useRealtimeSync = (channel: string, callback: SyncCallback, depende
 
   return { triggerSync };
 };
+
+export { RealtimeSyncManager }
