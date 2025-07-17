@@ -68,7 +68,7 @@ const KeyMetricsSection: React.FC = () => {
       initialData: { employeeEngagement },
       onSave: async (data) => {
         console.log('KeyMetricsSection: About to update employeeEngagement to:', data.employeeEngagement);
-        updateKeyMetrics({ employeeEngagement: data.employeeEngagement });
+        updateKeyMetrics({ employeeEngagement: Number(data.employeeEngagement) });
       }
     });
   };
@@ -101,8 +101,8 @@ const KeyMetricsSection: React.FC = () => {
           throw new Error('Le financement sécurisé ne peut pas dépasser le financement total');
         }
         updateKeyMetrics({ 
-          securedFinancing: data.securedFinancing,
-          totalFinancing: data.totalFinancing 
+          securedFinancing: Number(data.securedFinancing),
+          totalFinancing: Number(data.totalFinancing) 
         });
       }
     });
