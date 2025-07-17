@@ -60,9 +60,6 @@ const KeyMetricsSection: React.FC = () => {
           min: 0,
           max: 100,
           validation: (value: number) => {
-            if (value < 50) {
-              return 'Un taux inférieur à 50% peut compromettre le projet';
-            }
             return null;
           }
         }
@@ -132,12 +129,20 @@ const KeyMetricsSection: React.FC = () => {
               {index === 2 ? (
                 // Affichage en lecture seule pour les étapes réalisées
                 <div className="text-2xl font-bold">{metric.value}</div>
-              ) : (
+                className={cn(
+                  "text-2xl font-bold",
+                  index === 0 && employeeEngagement < 50 ? "text-red-600" : ""
+                )}
                 <EditableField
                   value={metric.value}
                   onClick={handleEdit}
                   className="text-2xl font-bold"
                 />
+              )}
+              {index === 0 && employeeEngagement < 50 && (
+                <p className="text-xs text-red-600 font-medium mt-1">
+                  ⚠️ Taux critique - Risque élevé pour le projet
+                </p>
               )}
               {metric.description && <p className="text-xs text-muted-foreground">{metric.description}</p>}
             </CardContent>
