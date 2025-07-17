@@ -99,37 +99,21 @@ const KeyMetricsSection: React.FC = () => {
 
   const handleEditSteps = () => {
     openModal({
-      title: 'Modifier l\'avancement des étapes',
-      description: 'Mettez à jour le nombre d\'étapes complétées dans le processus de transmission.',
+      title: 'Information sur l\'avancement des étapes',
+      description: 'Le nombre d\'étapes réalisées se calcule automatiquement en fonction du statut des livrables. Modifiez les statuts dans la section "Livrables et Données" pour mettre à jour ce compteur.',
       fields: [
         {
-          key: 'stepsCompleted',
-          label: 'Étapes réalisées',
-          type: 'number',
-          description: 'Nombre d\'étapes du processus de transmission qui ont été complètement finalisées.',
-          placeholder: '4',
-          required: true,
-          min: 0,
-        },
-        {
-          key: 'totalSteps',
-          label: 'Total des étapes',
-          type: 'number',
-          description: 'Nombre total d\'étapes prévues dans le processus de transmission.',
-          placeholder: '7',
-          required: true,
-          min: 1,
+          key: 'info',
+          label: 'Calcul automatique',
+          type: 'text',
+          description: 'Les étapes réalisées correspondent aux livrables ayant le statut "Complété". Pour modifier ce nombre, changez le statut des livrables dans la section correspondante.',
+          placeholder: 'Calcul automatique basé sur les livrables',
+          required: false,
         }
       ],
-      initialData: { stepsCompleted, totalSteps },
+      initialData: { info: 'Calcul automatique basé sur les livrables' },
       onSave: async (data) => {
-        if (data.stepsCompleted > data.totalSteps) {
-          throw new Error('Le nombre d\'étapes complétées ne peut pas dépasser le total');
-        }
-        updateKeyMetrics({ 
-          stepsCompleted: data.stepsCompleted,
-          totalSteps: data.totalSteps 
-        });
+        // No action needed as this is informational only
       }
     });
   };

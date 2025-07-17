@@ -11,12 +11,18 @@ export let keyMetrics = {
   employeeEngagement: 78,
   securedFinancing: 350000,
   totalFinancing: 500000,
-  stepsCompleted: 4,
-  totalSteps: 7,
+  get stepsCompleted() {
+    return documents.filter(doc => doc.status === 'completed').length;
+  },
+  get totalSteps() {
+    return documents.length;
+  },
 };
 
 export const updateKeyMetrics = (updates: Partial<typeof keyMetrics>) => {
-  keyMetrics = { ...keyMetrics, ...updates };
+  // Only update non-computed properties
+  const { stepsCompleted, totalSteps, ...otherUpdates } = updates;
+  Object.assign(keyMetrics, otherUpdates);
 };
 
 export const updateProjectData = (updates: Partial<typeof projectData>) => {
@@ -40,7 +46,8 @@ export const documents = [
   { id: 3, title: "Plan de financement provisoire", status: "completed", icon: Banknote },
   { id: 4, title: "Analyse organisationnelle", status: "in_progress", icon: Users },
   { id: 5, title: "Retours des entretiens salariés", status: "completed", icon: FileInput },
-  { id: 6, title: "Lettres d’intention bancaires", status: "pending", icon: Presentation },
+  { id: 6, title: "Lettre d'intention", status: "pending", icon: Presentation },
+  { id: 7, title: "Signature du protocole", status: "pending", icon: FileText },
 ];
 
 export const analysis = {
