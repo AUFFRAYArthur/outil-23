@@ -4,8 +4,8 @@ import { RealtimeSyncManager } from '../hooks/useRealtimeSync';
 const syncManager = RealtimeSyncManager.getInstance();
 
 export const projectData = {
-  projectName: "Transmission SCOP 'Innov&Co'",
-  editor: "Cabinet AuditPlus",
+  projectName: "Transmission SCOP 'LMC Atlantique'",
+  editor: "Cabinet SCOP&EC",
   date: new Date(),
   recipients: "Comité de pilotage, Dirigeant, Salariés",
 };
