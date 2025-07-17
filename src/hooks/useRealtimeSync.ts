@@ -64,10 +64,13 @@ class RealtimeSyncManager {
   }
   
   private executeNotification(channel: string): void {
+    console.log(`RealtimeSyncManager: Executing notification for channel "${channel}"`);
     const channelSubs = this.subscriptions.get(channel);
+    console.log(`RealtimeSyncManager: Found ${channelSubs?.length || 0} subscriptions for channel "${channel}"`);
     if (channelSubs) {
       channelSubs.forEach(sub => {
         try {
+          console.log(`RealtimeSyncManager: Calling callback for subscription "${sub.id}"`);
           sub.callback();
         } catch (error) {
           console.error(`Error in sync callback for ${sub.id}:`, error);

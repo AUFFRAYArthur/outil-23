@@ -11,10 +11,12 @@ const KeyMetricsSection: React.FC = () => {
   const [updateCounter, forceUpdate] = React.useReducer(x => x + 1, 0);
   
   // Subscribe to steps completion changes with stable callback
-  useRealtimeSync('steps-completion-sync', React.useCallback(() => {
+  const handleStepsSync = React.useCallback(() => {
     console.log('KeyMetricsSection: Received steps-completion-sync notification. Current steps:', keyMetrics.stepsCompleted, '/', keyMetrics.totalSteps);
     forceUpdate();
-  }, [forceUpdate]));
+  }, []);
+  
+  useRealtimeSync('steps-completion-sync', handleStepsSync);
   
   // Get current values on each render to ensure fresh data
   const { employeeEngagement, securedFinancing, totalFinancing, stepsCompleted, totalSteps } = keyMetrics;

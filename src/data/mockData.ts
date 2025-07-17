@@ -1,33 +1,7 @@
 import { FileText, BarChart3, Banknote, Users, FileInput, Presentation } from 'lucide-react';
 import { RealtimeSyncManager } from '../hooks/useRealtimeSync';
 
-const syncManager = (() => {
-  class RealtimeSyncManager {
-    private subscriptions: Map<string, Array<() => void>> = new Map();
-    private static instance: RealtimeSyncManager;
-
-    static getInstance(): RealtimeSyncManager {
-      if (!RealtimeSyncManager.instance) {
-        RealtimeSyncManager.instance = new RealtimeSyncManager();
-      }
-      return RealtimeSyncManager.instance;
-    }
-
-    notify(channel: string): void {
-      const callbacks = this.subscriptions.get(channel);
-      if (callbacks) {
-        callbacks.forEach(callback => {
-          try {
-            callback();
-          } catch (error) {
-            console.error(`Error in sync notification:`, error);
-          }
-        });
-      }
-    }
-  }
-  return RealtimeSyncManager.getInstance();
-})();
+const syncManager = RealtimeSyncManager.getInstance();
 
 export const projectData = {
   projectName: "Transmission SCOP 'Innov&Co'",
