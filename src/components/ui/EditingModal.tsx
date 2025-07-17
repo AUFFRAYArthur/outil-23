@@ -39,12 +39,14 @@ const EditingModal: React.FC<EditingModalProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [saveError, setSaveError] = useState<string>('');
 
   useEffect(() => {
     if (isOpen) {
       setFormData(initialData);
       setErrors({});
       setSaveSuccess(false);
+      setSaveError('');
     }
   }, [isOpen, initialData]);
 
@@ -101,6 +103,11 @@ const EditingModal: React.FC<EditingModalProps> = ({
     if (errors[key]) {
       setErrors(prev => ({ ...prev, [key]: '' }));
     }
+    
+    // Clear general save error when user makes changes
+    if (saveError) {
+      setSaveError('');
+    }
   };
 
   const handleSave = async () => {
@@ -109,6 +116,7 @@ const EditingModal: React.FC<EditingModalProps> = ({
     }
 
     setIsLoading(true);
+    setSaveError('');
     try {
       await onSave(formData);
       setSaveSuccess(true);
@@ -116,7 +124,8 @@ const EditingModal: React.FC<EditingModalProps> = ({
         onClose();
       }, 1000);
     } catch (error) {
-      console.error('Error saving data:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Une erreur est survenue lors de la sauvegarde';
+      setSaveError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -265,6 +274,16 @@ const EditingModal: React.FC<EditingModalProps> = ({
 
         {/* Content */}
         <div className="p-6 overflow-y-auto flex-1 min-h-0">
+          {saveError && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+              <div className="flex items-center">
+                <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
+                <p className="text-red-700 font-medium">Erreur de sauvegarde</p>
+              </div>
+              <p className="text-red-600 mt-1 text-sm">{saveError}</p>
+            </div>
+          )}
+          
           <div className="space-y-6">
             {fields.map(renderField)}
           </div>
