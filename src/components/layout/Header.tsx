@@ -125,6 +125,17 @@ const Header: React.FC = () => {
               Cas fil rouge
             </Button>
             
+            {/* Bouton Reset discret */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleReset}
+              className="text-xs text-gray-500 hover:text-gray-700"
+            >
+              <RotateCcw className="h-3 w-3 mr-1" />
+              reset
+            </Button>
+            
             {/* Icône Notice */}
             <div className="relative">
               <button
