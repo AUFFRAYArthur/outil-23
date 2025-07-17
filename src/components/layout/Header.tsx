@@ -1,6 +1,5 @@
 import React from 'react';
-import { Briefcase, FileDown, Settings, Edit3 } from 'lucide-react';
-import { Button } from '../ui/Button';
+import { Briefcase, Edit3 } from 'lucide-react';
 import { projectData, updateProjectData } from '../../data/mockData';
 import EditableField from '../ui/EditableField';
 import EditingModal from '../ui/EditingModal';
@@ -87,15 +86,6 @@ const Header: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm">
-              <FileDown className="h-4 w-4 mr-2" />
-              Exporter
-            </Button>
-            <Button variant="ghost" size="icon">
-              <Settings className="h-5 w-5" />
-            </Button>
           </div>
         </div>
       </div>
