@@ -120,7 +120,7 @@ const Header: React.FC = () => {
             <Button
               variant="outline"
               onClick={handleFilRouge}
-              className="text-sm px-3"
+              className="text-sm px-2"
             >
               Cas fil rouge
             </Button>
