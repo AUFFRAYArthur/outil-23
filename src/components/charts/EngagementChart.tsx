@@ -1,8 +1,14 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { keyMetrics } from '../../data/mockData';
+import { useRealtimeSync } from '../../hooks/useRealtimeSync';
 
 const EngagementChart: React.FC = () => {
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+  
+  // Subscribe to employee engagement changes
+  useRealtimeSync('employee-engagement-sync', forceUpdate);
+  
   const { employeeEngagement } = keyMetrics;
   const data = [
     { name: 'Favorables', value: employeeEngagement },

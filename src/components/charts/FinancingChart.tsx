@@ -1,8 +1,14 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { keyMetrics } from '../../data/mockData';
+import { useRealtimeSync } from '../../hooks/useRealtimeSync';
 
 const FinancingChart: React.FC = () => {
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+  
+  // Subscribe to financing changes
+  useRealtimeSync('financing-sync', forceUpdate);
+  
   const { securedFinancing, totalFinancing } = keyMetrics;
   const remainingFinancing = totalFinancing - securedFinancing;
 

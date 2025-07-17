@@ -5,8 +5,14 @@ import { Users, Target, TrendingUp, CheckCircle } from 'lucide-react';
 import EditableField from '../ui/EditableField';
 import EditingModal from '../ui/EditingModal';
 import { useEditingModal } from '../../hooks/useEditingModal';
+import { useRealtimeSync } from '../../hooks/useRealtimeSync';
 
 const KeyMetricsSection: React.FC = () => {
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+  
+  // Subscribe to steps completion changes
+  useRealtimeSync('steps-completion-sync', forceUpdate);
+  
   const { employeeEngagement, securedFinancing, totalFinancing, stepsCompleted, totalSteps } = keyMetrics;
   const financingPercentage = (securedFinancing / totalFinancing) * 100;
   const { modalState, openModal, closeModal } = useEditingModal();

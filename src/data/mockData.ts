@@ -1,4 +1,33 @@
 import { FileText, BarChart3, Banknote, Users, FileInput, Presentation } from 'lucide-react';
+import { RealtimeSyncManager } from '../hooks/useRealtimeSync';
+
+const syncManager = (() => {
+  class RealtimeSyncManager {
+    private subscriptions: Map<string, Array<() => void>> = new Map();
+    private static instance: RealtimeSyncManager;
+
+    static getInstance(): RealtimeSyncManager {
+      if (!RealtimeSyncManager.instance) {
+        RealtimeSyncManager.instance = new RealtimeSyncManager();
+      }
+      return RealtimeSyncManager.instance;
+    }
+
+    notify(channel: string): void {
+      const callbacks = this.subscriptions.get(channel);
+      if (callbacks) {
+        callbacks.forEach(callback => {
+          try {
+            callback();
+          } catch (error) {
+            console.error(`Error in sync notification:`, error);
+          }
+        });
+      }
+    }
+  }
+  return RealtimeSyncManager.getInstance();
+})();
 
 export const projectData = {
   projectName: "Transmission SCOP 'Innov&Co'",
@@ -23,6 +52,14 @@ export const updateKeyMetrics = (updates: Partial<typeof keyMetrics>) => {
   // Only update non-computed properties
   const { stepsCompleted, totalSteps, ...otherUpdates } = updates;
   Object.assign(keyMetrics, otherUpdates);
+  
+  // Trigger real-time sync for specific metrics
+  if ('employeeEngagement' in otherUpdates) {
+    syncManager.notify('employee-engagement-sync');
+  }
+  if ('securedFinancing' in otherUpdates || 'totalFinancing' in otherUpdates) {
+    syncManager.notify('financing-sync');
+  }
 };
 
 export const updateProjectData = (updates: Partial<typeof projectData>) => {
@@ -35,6 +72,8 @@ export const updateAnalysis = (updates: Partial<typeof analysis>) => {
 
 export const updateDocuments = (updates: typeof documents) => {
   documents.splice(0, documents.length, ...updates);
+  // Trigger real-time sync for steps completion
+  syncManager.notify('steps-completion-sync');
 };
 
 export const updateNextSteps = (updates: typeof nextSteps) => {
