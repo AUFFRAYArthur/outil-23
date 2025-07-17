@@ -16,6 +16,10 @@ function App() {
 
   const handleUpdatePrintSettings = (newVisibility: SectionVisibility) => {
     setSectionsVisibility(newVisibility);
+    // Petit délai pour laisser le temps au DOM de se mettre à jour
+    setTimeout(() => {
+      window.print();
+    }, 100);
   };
 
   return (

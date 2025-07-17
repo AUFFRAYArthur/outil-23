@@ -58,7 +58,7 @@ const RecommendationSection: React.FC = () => {
           </div>
         )}
         <div className="flex justify-end">
-          <Button onClick={handlePrint} className="recommendation-print-button">
+          <Button onClick={handlePrint}>
             <Printer className="h-4 w-4 mr-2" />
             Imprimer le compte rendu intermédiaire
           </Button>
