@@ -7,7 +7,7 @@ export const projectData = {
   recipients: "Comité de pilotage, Dirigeant, Salariés",
 };
 
-export const keyMetrics = {
+export let keyMetrics = {
   employeeEngagement: 78,
   securedFinancing: 350000,
   totalFinancing: 500000,
@@ -15,6 +15,25 @@ export const keyMetrics = {
   totalSteps: 7,
 };
 
+export const updateKeyMetrics = (updates: Partial<typeof keyMetrics>) => {
+  keyMetrics = { ...keyMetrics, ...updates };
+};
+
+export const updateProjectData = (updates: Partial<typeof projectData>) => {
+  Object.assign(projectData, updates);
+};
+
+export const updateAnalysis = (updates: Partial<typeof analysis>) => {
+  Object.assign(analysis, updates);
+};
+
+export const updateDocuments = (updates: typeof documents) => {
+  documents.splice(0, documents.length, ...updates);
+};
+
+export const updateNextSteps = (updates: typeof nextSteps) => {
+  nextSteps.splice(0, nextSteps.length, ...updates);
+};
 export const documents = [
   { id: 1, title: "Diagnostic initial", status: "completed", icon: FileText },
   { id: 2, title: "Évaluation de l’entreprise", status: "completed", icon: BarChart3 },

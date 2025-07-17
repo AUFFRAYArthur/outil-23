@@ -1,11 +1,54 @@
 import React from 'react';
 import { Briefcase, FileDown, Settings } from 'lucide-react';
 import { Button } from '../ui/Button';
-import { projectData } from '../../data/mockData';
+import { projectData, updateProjectData } from '../../data/mockData';
+import EditableField from '../ui/EditableField';
+import EditingModal from '../ui/EditingModal';
+import { useEditingModal } from '../../hooks/useEditingModal';
 
 const Header: React.FC = () => {
+  const { modalState, openModal, closeModal } = useEditingModal();
+
+  const handleEditProject = () => {
+    openModal({
+      title: 'Modifier les informations du projet',
+      description: 'Mettez à jour les informations générales du projet de transmission.',
+      fields: [
+        {
+          key: 'projectName',
+          label: 'Nom du projet',
+          type: 'text',
+          description: 'Nom de l\'entreprise ou du projet de transmission en cours.',
+          placeholder: 'Transmission SCOP \'Innov&Co\'',
+          required: true,
+        },
+        {
+          key: 'editor',
+          label: 'Cabinet conseil',
+          type: 'text',
+          description: 'Nom du cabinet ou consultant en charge de l\'accompagnement.',
+          placeholder: 'Cabinet AuditPlus',
+          required: true,
+        },
+        {
+          key: 'recipients',
+          label: 'Destinataires',
+          type: 'text',
+          description: 'Liste des personnes ou entités destinataires de ce rapport.',
+          placeholder: 'Comité de pilotage, Dirigeant, Salariés',
+          required: true,
+        }
+      ],
+      initialData: projectData,
+      onSave: async (data) => {
+        updateProjectData(data);
+      }
+    });
+  };
+
   return (
-    <header className="bg-white/80 backdrop-blur-lg border-b sticky top-0 z-50">
+    <>
+      <header className="bg-white/80 backdrop-blur-lg border-b sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-4">
@@ -13,8 +56,18 @@ const Header: React.FC = () => {
               <Briefcase className="h-6 w-6" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-800">Compte rendu intermédiaire de mission</h1>
-              <p className="text-sm text-gray-500 hidden sm:block">{projectData.projectName}</p>
+              <EditableField
+                value="Compte rendu intermédiaire de mission"
+                onClick={handleEditProject}
+                className="text-xl font-bold text-gray-800"
+                showEditIcon={false}
+              />
+              <EditableField
+                value={projectData.projectName}
+                onClick={handleEditProject}
+                className="text-sm text-gray-500 hidden sm:block"
+                showEditIcon={false}
+              />
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -28,7 +81,18 @@ const Header: React.FC = () => {
           </div>
         </div>
       </div>
-    </header>
+      </header>
+      
+      <EditingModal
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        title={modalState.title}
+        description={modalState.description}
+        fields={modalState.fields}
+        initialData={modalState.initialData}
+        onSave={modalState.onSave}
+      />
+    </>
   );
 };
 
