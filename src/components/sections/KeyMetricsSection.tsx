@@ -8,11 +8,16 @@ import { useEditingModal } from '../../hooks/useEditingModal';
 import { useRealtimeSync } from '../../hooks/useRealtimeSync';
 
 const KeyMetricsSection: React.FC = () => {
-  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+  const [updateCounter, forceUpdate] = React.useReducer(x => x + 1, 0);
   
-  // Subscribe to steps completion changes
-  useRealtimeSync('steps-completion-sync', forceUpdate);
+  // Subscribe to steps completion changes with stable callback
+  const handleStepsSync = React.useCallback(() => {
+    forceUpdate();
+  }, []);
   
+  useRealtimeSync('steps-completion-sync', handleStepsSync);
+  
+  // Get current values on each render to ensure fresh data
   const { employeeEngagement, securedFinancing, totalFinancing, stepsCompleted, totalSteps } = keyMetrics;
   const financingPercentage = (securedFinancing / totalFinancing) * 100;
   const { modalState, openModal, closeModal } = useEditingModal();

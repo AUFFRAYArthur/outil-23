@@ -4,11 +4,16 @@ import { keyMetrics } from '../../data/mockData';
 import { useRealtimeSync } from '../../hooks/useRealtimeSync';
 
 const FinancingChart: React.FC = () => {
-  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+  const [updateCounter, forceUpdate] = React.useReducer(x => x + 1, 0);
   
-  // Subscribe to financing changes
-  useRealtimeSync('financing-sync', forceUpdate);
+  // Subscribe to financing changes with stable callback
+  const handleFinancingSync = React.useCallback(() => {
+    forceUpdate();
+  }, []);
   
+  useRealtimeSync('financing-sync', handleFinancingSync);
+  
+  // Get current values on each render to ensure fresh data
   const { securedFinancing, totalFinancing } = keyMetrics;
   const remainingFinancing = totalFinancing - securedFinancing;
 

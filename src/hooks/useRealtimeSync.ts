@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 type SyncCallback = () => void;
 
@@ -10,6 +10,7 @@ interface SyncSubscription {
 class RealtimeSyncManager {
   private subscriptions: Map<string, SyncSubscription[]> = new Map();
   private static instance: RealtimeSyncManager;
+  private notificationQueue: Map<string, NodeJS.Timeout> = new Map();
 
   static getInstance(): RealtimeSyncManager {
     if (!RealtimeSyncManager.instance) {
@@ -19,11 +20,19 @@ class RealtimeSyncManager {
   }
 
   subscribe(channel: string, id: string, callback: SyncCallback): () => void {
+    // Ensure channel exists
     if (!this.subscriptions.has(channel)) {
       this.subscriptions.set(channel, []);
     }
     
     const channelSubs = this.subscriptions.get(channel)!;
+    
+    // Remove existing subscription with same id to prevent duplicates
+    const existingIndex = channelSubs.findIndex(sub => sub.id === id);
+    if (existingIndex > -1) {
+      channelSubs.splice(existingIndex, 1);
+    }
+    
     const subscription: SyncSubscription = { id, callback };
     channelSubs.push(subscription);
 
@@ -33,10 +42,28 @@ class RealtimeSyncManager {
       if (index > -1) {
         channelSubs.splice(index, 1);
       }
+      // Clean up empty channels
+      if (channelSubs.length === 0) {
+        this.subscriptions.delete(channel);
+      }
     };
   }
 
   notify(channel: string): void {
+    // Debounce notifications to prevent excessive re-renders
+    if (this.notificationQueue.has(channel)) {
+      clearTimeout(this.notificationQueue.get(channel)!);
+    }
+    
+    const timeoutId = setTimeout(() => {
+      this.executeNotification(channel);
+      this.notificationQueue.delete(channel);
+    }, 0); // Use 0ms timeout to batch synchronous updates
+    
+    this.notificationQueue.set(channel, timeoutId);
+  }
+  
+  private executeNotification(channel: string): void {
     const channelSubs = this.subscriptions.get(channel);
     if (channelSubs) {
       channelSubs.forEach(sub => {
@@ -48,27 +75,29 @@ class RealtimeSyncManager {
       });
     }
   }
+  
+  // Cleanup method for testing or manual cleanup
+  cleanup(): void {
+    this.notificationQueue.forEach(timeout => clearTimeout(timeout));
+    this.notificationQueue.clear();
+    this.subscriptions.clear();
+  }
 }
 
-export const useRealtimeSync = (channel: string, callback: SyncCallback, dependencies: any[] = []) => {
+export const useRealtimeSync = (channel: string, callback: SyncCallback) => {
   const syncManager = RealtimeSyncManager.getInstance();
-  const callbackRef = useRef(callback);
+  const stableCallback = useCallback(callback, []);
   const idRef = useRef(`${channel}_${Math.random().toString(36).substr(2, 9)}`);
-
-  // Update callback ref when dependencies change
-  useEffect(() => {
-    callbackRef.current = callback;
-  }, dependencies);
 
   useEffect(() => {
     const unsubscribe = syncManager.subscribe(
       channel, 
       idRef.current, 
-      () => callbackRef.current()
+      stableCallback
     );
 
     return unsubscribe;
-  }, [channel]);
+  }, [channel, stableCallback]);
 
   const triggerSync = () => {
     syncManager.notify(channel);
