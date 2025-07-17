@@ -129,14 +129,14 @@ const KeyMetricsSection: React.FC = () => {
               {index === 2 ? (
                 // Affichage en lecture seule pour les étapes réalisées
                 <div className="text-2xl font-bold">{metric.value}</div>
-                className={cn(
-                  "text-2xl font-bold",
-                  index === 0 && employeeEngagement < 50 ? "text-red-600" : ""
-                )}
+              ) : (
                 <EditableField
                   value={metric.value}
                   onClick={handleEdit}
-                  className="text-2xl font-bold"
+                  className={cn(
+                    "text-2xl font-bold",
+                    index === 0 && employeeEngagement < 50 ? "text-red-600" : ""
+                  )}
                 />
               )}
               {index === 0 && employeeEngagement < 50 && (
