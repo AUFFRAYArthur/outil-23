@@ -56,18 +56,33 @@ const Header: React.FC = () => {
               <Briefcase className="h-6 w-6" />
             </div>
             <div>
-              <EditableField
-                value="Compte rendu intermédiaire de mission"
+              <div 
                 onClick={handleEditProject}
-                className="text-xl font-bold text-gray-800"
-                showEditIcon={false}
-              />
-              <EditableField
-                value={projectData.projectName}
-                onClick={handleEditProject}
-                className="text-sm text-gray-500 hidden sm:block"
-                showEditIcon={false}
-              />
+                className="group cursor-pointer p-2 -m-2 rounded-lg transition-all duration-200 hover:bg-blue-50 hover:shadow-sm"
+                role="button"
+                tabIndex={0}
+                aria-label="Cliquer pour modifier les informations du projet"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleEditProject();
+                  }
+                }}
+              >
+                <div className="flex items-center space-x-2">
+                  <h1 className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
+                    Compte rendu intermédiaire de mission
+                  </h1>
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <div className="bg-blue-100 text-blue-600 px-2 py-1 rounded-md text-xs font-medium">
+                      Cliquer pour modifier
+                    </div>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-500 hidden sm:block group-hover:text-blue-500 transition-colors">
+                  {projectData.projectName}
+                </p>
+              </div>
             </div>
           </div>
           <div className="flex items-center space-x-2">
