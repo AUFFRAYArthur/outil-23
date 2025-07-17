@@ -7,15 +7,22 @@ import { useEditingModal } from '../../hooks/useEditingModal';
 import { Button } from '../ui/Button';
 import NoticeTooltip from './NoticeTooltip';
 import SaveModal from './SaveModal';
+import PrintSettingsModal, { SectionVisibility } from './PrintSettingsModal';
 import { useSaveLoad } from '../../hooks/useSaveLoad';
 import { useFilRouge } from '../../hooks/useFilRouge';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  sectionsVisibility: SectionVisibility;
+  onUpdatePrintSettings: (visibility: SectionVisibility) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ sectionsVisibility, onUpdatePrintSettings }) => {
   const { modalState, openModal, closeModal } = useEditingModal();
   const { exportData, importData } = useSaveLoad();
   const { loadFilRougeData, resetData } = useFilRouge();
   const [showNotice, setShowNotice] = React.useState(false);
   const [showSaveModal, setShowSaveModal] = React.useState(false);
+  const [showPrintModal, setShowPrintModal] = React.useState(false);
   const [showResetConfirm, setShowResetConfirm] = React.useState(false);
 
   const handleEditProject = () => {
@@ -56,7 +63,15 @@ const Header: React.FC = () => {
   };
 
   const handlePrint = () => {
-    window.print();
+    setShowPrintModal(true);
+  };
+
+  const handlePrintConfirmed = (selections: SectionVisibility) => {
+    onUpdatePrintSettings(selections);
+    // Petit délai pour laisser le temps au DOM de se mettre à jour
+    setTimeout(() => {
+      window.print();
+    }, 100);
   };
 
   const handleFilRouge = () => {
@@ -186,6 +201,13 @@ const Header: React.FC = () => {
         onClose={() => setShowSaveModal(false)}
         onExport={exportData}
         onImport={importData}
+      />
+      
+      <PrintSettingsModal
+        isOpen={showPrintModal}
+        onClose={() => setShowPrintModal(false)}
+        initialSelections={sectionsVisibility}
+        onPrint={handlePrintConfirmed}
       />
       
       {/* Modal de confirmation reset */}

@@ -124,13 +124,28 @@
   
   /* Grilles et layouts */
   .grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+  
+  /* Layout spécifique pour la grille principale */
+  .grid.grid-cols-1.lg\\:grid-cols-3 {
     display: block !important;
   }
   
-  .grid > * {
-    margin-bottom: 1rem;
+  .grid.grid-cols-1.lg\\:grid-cols-3 > * {
     page-break-inside: avoid;
     break-inside: avoid;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Sous-grilles dans les colonnes */
+  .lg\\:col-span-2 .space-y-8 > *,
+  .lg\\:col-span-1 .space-y-8 > * {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 1rem;
   }
   
   /* Graphiques - s'assurer qu'ils restent lisibles */
