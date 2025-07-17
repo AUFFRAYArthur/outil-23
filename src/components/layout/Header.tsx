@@ -1,5 +1,5 @@
 import React from 'react';
-import { Briefcase, FileDown, Settings } from 'lucide-react';
+import { Briefcase, FileDown, Settings, Edit3 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { projectData, updateProjectData } from '../../data/mockData';
 import EditableField from '../ui/EditableField';
@@ -79,9 +79,12 @@ const Header: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <p className="text-sm text-gray-500 hidden sm:block group-hover:text-blue-500 transition-colors">
-                  {projectData.projectName}
-                </p>
+                <div className="flex items-center space-x-2">
+                  <p className="text-sm text-gray-500 hidden sm:block group-hover:text-blue-500 transition-colors">
+                    {projectData.projectName}
+                  </p>
+                  <Edit3 className="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                </div>
               </div>
             </div>
           </div>
