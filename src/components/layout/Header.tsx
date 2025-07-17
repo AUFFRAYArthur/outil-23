@@ -19,7 +19,7 @@ const Header: React.FC = () => {
           label: 'Nom du projet',
           type: 'text',
           description: 'Nom de l\'entreprise ou du projet de transmission en cours.',
-          placeholder: 'Transmission SCOP \'Innov&Co\'',
+          placeholder: 'Transmission SCOP \'LMC Atlantique\'',
           required: true,
         },
         {
